@@ -1,3 +1,7 @@
+//Run with cron (or whatever you want to use), for example every 5 or 10 mins.
+//Change the access token to the one that digitalocean gave you (Personal access token)
+//In order to this to work you have to have created first the domain that you want to use
+//(it won't create it, it only updates it)
 package main
 
 import (
@@ -9,10 +13,9 @@ import (
 )
 
 func main() {
-
-	var accessToken string = "your personal token string from digitalocean"
-	changeDnsIp(accessToken, "the domain which A (ip) record you want to change, ex: home.mydomain.com")
-
+        var accessToken string = "your personal access token"
+        var domain string = "your domain"
+        changeDnsIp(accessToken, domain)
 }
 
 func getOwnIp() string {
