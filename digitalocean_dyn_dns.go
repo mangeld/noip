@@ -7,22 +7,41 @@ package main
 import (
 	"code.google.com/p/goauth2/oauth"
 	"github.com/digitalocean/godo"
+	"encoding/json"
 	"io/ioutil"
 	"net/http"
-	"strings"
+	"fmt"
 )
 
+type MyIp struct {
+    Ip string `json:"ip"`
+    Hostname string `json:""`
+    City string `json:""`
+    Region string `json:""`
+    Country string `json:""`
+    Loc string `json:""`
+    Org string `json:""`
+}
+
 func main() {
-        var accessToken string = "your personal access token"
-        var domain string = "your domain"
+        var accessToken string = "your token"
+        var domain string = "Domain to update"
         changeDnsIp(accessToken, domain)
 }
 
 func getOwnIp() string {
-	resp, _ := http.Get("http://www.telize.com/ip")
+	resp, err := http.Get("http://ipinfo.io/json")
+	if err != nil {
+	    fmt.Printf(err.Error())
+	}
 	defer resp.Body.Close()
 	data, _ := ioutil.ReadAll(resp.Body)
-	return strings.Trim(string(data), "\n")
+	response := MyIp{}
+	err = json.Unmarshal(data, &response)
+	if err != nil {
+	    fmt.Printf(err.Error())
+	}
+	return response.Ip
 }
 
 func changeDnsIp(accessToken string, domainName string) {
