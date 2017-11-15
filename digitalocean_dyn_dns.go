@@ -5,12 +5,18 @@
 package main
 
 import (
-	"code.google.com/p/goauth2/oauth"
+	"golang.org/x/oauth2"
 	"github.com/digitalocean/godo"
+	"github.com/digitalocean/godo/context"
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
 	"fmt"
+)
+
+const (
+	accessToken = "your token"
+	domain      = "your domain"
 )
 
 type MyIp struct {
@@ -23,10 +29,18 @@ type MyIp struct {
     Org string `json:""`
 }
 
+type TokenSource struct {
+	AccessToken string
+}
+
+func (t *TokenSource) Token() (*oauth2.Token, error) {
+	token := &oauth2.Token{AccessToken: t.AccessToken}
+	return token, nil
+}
+
 func main() {
-        var accessToken string = "your token"
-        var domain string = "Domain to update"
-        changeDnsIp(accessToken, domain)
+	tokenSource := &TokenSource{AccessToken: accessToken}
+        changeDnsIp(tokenSource, domain)
 }
 
 func getOwnIp() string {
@@ -44,16 +58,12 @@ func getOwnIp() string {
 	return response.Ip
 }
 
-func changeDnsIp(accessToken string, domainName string) {
-
-	t := &oauth.Transport{
-		Token: &oauth.Token{AccessToken: accessToken},
-	}
-
-	client := godo.NewClient(t.Client())
+func changeDnsIp(accessToken *TokenSource, domainName string) {
+	oauth_client := oauth2.NewClient(context.Background(), accessToken)
+	client := godo.NewClient(oauth_client)
 	listOps := godo.ListOptions{Page: 1, PerPage: 50}
 
-	records, _, _ := client.Domains.Records(domainName, &listOps)
+	records, _, _ := client.Domains.Records(context.Background(), domainName, &listOps)
 	var ipRecord = godo.DomainRecord{}
 	for _, r := range records {
 		if r.Type == "A" {
@@ -62,5 +72,5 @@ func changeDnsIp(accessToken string, domainName string) {
 	}
 
 	editRequest := godo.DomainRecordEditRequest{Data: getOwnIp()}
-	client.Domains.EditRecord(domainName, ipRecord.ID, &editRequest)
+	client.Domains.EditRecord(context.Background(), domainName, ipRecord.ID, &editRequest)
 }
