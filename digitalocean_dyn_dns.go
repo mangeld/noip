@@ -35,6 +35,7 @@ type TokenSource struct {
 
 func (t *TokenSource) Token() (*oauth2.Token, error) {
 	token := &oauth2.Token{AccessToken: t.AccessToken}
+	fmt.Printf("Using token: %v... for domain: %v\n", accessToken[:5], domain)
 	return token, nil
 }
 
@@ -72,5 +73,9 @@ func changeDnsIp(accessToken *TokenSource, domainName string) {
 	}
 
 	editRequest := godo.DomainRecordEditRequest{Data: getOwnIp()}
-	client.Domains.EditRecord(context.Background(), domainName, ipRecord.ID, &editRequest)
+	fmt.Printf("Updating record %v to new ip: %v\n", domainName, editRequest.Data)
+	_, _, err := client.Domains.EditRecord(context.Background(), domainName, ipRecord.ID, &editRequest)
+	if err != nil {
+		fmt.Errorf(err.Error())
+	}
 }
