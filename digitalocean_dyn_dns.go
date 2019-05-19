@@ -5,66 +5,74 @@
 package main
 
 import (
-	"golang.org/x/oauth2"
-	"github.com/digitalocean/godo"
-	"github.com/digitalocean/godo/context"
+	"context"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
-	"fmt"
+	"os"
+
+	"github.com/digitalocean/godo"
+	"golang.org/x/oauth2"
 )
 
-const (
-	accessToken = "your token"
-	domain      = "your domain"
-)
+type Config struct {
+	AccessToken string
+	Domain      string
+}
+
+func (c *Config) Init() {
+	c.AccessToken = os.Getenv("ACCESS_TOKEN")
+	c.Domain = os.Getenv("DOMAIN")
+}
+
+func (t *Config) Token() (*oauth2.Token, error) {
+	token := &oauth2.Token{AccessToken: t.AccessToken}
+	fmt.Printf("Using token: %v... for domain: %v\n", t.AccessToken[:5], t.Domain)
+	return token, nil
+}
 
 type MyIp struct {
-    Ip string `json:"ip"`
-    Hostname string `json:""`
-    City string `json:""`
-    Region string `json:""`
-    Country string `json:""`
-    Loc string `json:""`
-    Org string `json:""`
+	Ip       string `json:"ip"`
+	Hostname string `json:""`
+	City     string `json:""`
+	Region   string `json:""`
+	Country  string `json:""`
+	Loc      string `json:""`
+	Org      string `json:""`
 }
 
 type TokenSource struct {
 	AccessToken string
 }
 
-func (t *TokenSource) Token() (*oauth2.Token, error) {
-	token := &oauth2.Token{AccessToken: t.AccessToken}
-	fmt.Printf("Using token: %v... for domain: %v\n", accessToken[:5], domain)
-	return token, nil
-}
-
 func main() {
-	tokenSource := &TokenSource{AccessToken: accessToken}
-        changeDnsIp(tokenSource, domain)
+	config := Config{}
+	config.Init()
+	changeDnsIp(&config)
 }
 
 func getOwnIp() string {
 	resp, err := http.Get("http://ipinfo.io/json")
 	if err != nil {
-	    fmt.Printf(err.Error())
+		fmt.Printf(err.Error())
 	}
 	defer resp.Body.Close()
 	data, _ := ioutil.ReadAll(resp.Body)
 	response := MyIp{}
 	err = json.Unmarshal(data, &response)
 	if err != nil {
-	    fmt.Printf(err.Error())
+		fmt.Printf(err.Error())
 	}
 	return response.Ip
 }
 
-func changeDnsIp(accessToken *TokenSource, domainName string) {
-	oauth_client := oauth2.NewClient(context.Background(), accessToken)
+func changeDnsIp(config *Config) {
+	oauth_client := oauth2.NewClient(context.Background(), config)
 	client := godo.NewClient(oauth_client)
 	listOps := godo.ListOptions{Page: 1, PerPage: 50}
 
-	records, _, _ := client.Domains.Records(context.Background(), domainName, &listOps)
+	records, _, _ := client.Domains.Records(context.Background(), config.Domain, &listOps)
 	var ipRecord = godo.DomainRecord{}
 	for _, r := range records {
 		if r.Type == "A" {
@@ -73,9 +81,9 @@ func changeDnsIp(accessToken *TokenSource, domainName string) {
 	}
 
 	editRequest := godo.DomainRecordEditRequest{Data: getOwnIp()}
-	fmt.Printf("Updating record %v to new ip: %v\n", domainName, editRequest.Data)
-	_, _, err := client.Domains.EditRecord(context.Background(), domainName, ipRecord.ID, &editRequest)
+	fmt.Printf("Updating record %v to new ip: %v\n", config.Domain, editRequest.Data)
+	_, _, err := client.Domains.EditRecord(context.Background(), config.Domain, ipRecord.ID, &editRequest)
 	if err != nil {
-		fmt.Errorf(err.Error())
+		fmt.Printf(err.Error())
 	}
 }
