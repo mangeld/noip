@@ -28,7 +28,6 @@ func (c *Config) Init() {
 
 func (t *Config) Token() (*oauth2.Token, error) {
 	token := &oauth2.Token{AccessToken: t.AccessToken}
-	fmt.Printf("Using token: %v... for domain: %v\n", t.AccessToken[:5], t.Domain)
 	return token, nil
 }
 
@@ -49,6 +48,7 @@ type TokenSource struct {
 func main() {
 	config := Config{}
 	config.Init()
+	fmt.Printf("Using token: %v... for domain: %v\n", config.AccessToken[:8], config.Domain)
 	changeDnsIp(&config)
 }
 
@@ -60,8 +60,7 @@ func getOwnIp() string {
 	defer resp.Body.Close()
 	data, _ := ioutil.ReadAll(resp.Body)
 	response := MyIp{}
-	err = json.Unmarshal(data, &response)
-	if err != nil {
+	if err = json.Unmarshal(data, &response); err != nil {
 		fmt.Printf(err.Error())
 	}
 	return response.Ip
