@@ -3,5 +3,5 @@ language: go
 go:
  - 1.12
 
-build:
+script:
   - GOOS=linux GOARCH=amd64 go build digitalocean_dyn_dns.go
