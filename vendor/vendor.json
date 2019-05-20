@@ -1,0 +1,25 @@
+{
+	"comment": "",
+	"ignore": "test",
+	"package": [
+		{
+			"checksumSHA1": "0H698MblsgWxDYloIIvcZzHvf5c=",
+			"path": "github.com/digitalocean/godo",
+			"revision": "330a20f7818fe38e8d3e9d590dceb02b01bc31b8",
+			"revisionTime": "2019-05-20T15:48:15Z"
+		},
+		{
+			"checksumSHA1": "/94OVlOstzQP2qidGqEKOXBrzNA=",
+			"path": "golang.org/x/oauth2",
+			"revision": "950ef44c6e079baf075030377d90bf0c7e4b7b7a",
+			"revisionTime": "2019-05-17T17:56:57Z"
+		},
+		{
+			"checksumSHA1": "rnUL+5Yzlt+Ky2dlB61VqfhBOb8=",
+			"path": "golang.org/x/oauth2/internal",
+			"revision": "950ef44c6e079baf075030377d90bf0c7e4b7b7a",
+			"revisionTime": "2019-05-17T17:56:57Z"
+		}
+	],
+	"rootPath": "github.com/mangeld/noip"
+}
