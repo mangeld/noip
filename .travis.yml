@@ -4,4 +4,13 @@ go:
  - 1.12
 
 script:
-  - GOOS=linux GOARCH=amd64 go build digitalocean_dyn_dns.go
+  - GOOS=linux GOARCH=amd64 go build main.go
+
+deploy:
+  provider: releases
+  api_key:
+    secure: "DAhwz/g8ec2A0Dv8rtZFVEp77aG5PXxo1smJpmue4W+6Anw78baaKkS2so1yozwjnT1H4DP73Ae+4n2kNpwLRwZvPIkWRUjDJIx8XEYxlWkP2zzqH8Rwe6fxUq8TnqgUHlaWv1mpRJ6Cf6Rm1eyGGQ0oA2qqfRdnPaZNkbui3UZb9R10cmORF71J2SVO3Hv8YiuzLeSJ5KJuj9hkeWwix9sRnZR2CCnB2MUHZK8HJBZkVRbo3IiPsuGqoq1JKu4olL7xWJPR5+QAqKXcwPyhD7ASkULK4kevb3qU/ZFgdPPQzMwdk9VEKwVvUXwr94u1qFKvx0GN70rswHXeqNc+z1BRYtDZPrLm2nKrwAxksvlso4UGigxsTgKOGns6x0JZrlJvhrKNje0fFgT4zsKtZ1z2im4PIb7VGjzDFRGo71ueGX/WX9MKo7YDgvLUKFvJ5nWC/IZjr7Wnqsalb2GWEltw/arAbVfG/2nfQESMIag05kYrJw1neEXIkbMXp6KjvGNU1+5aRQMbLlBRvq89zorQEY2nJAZo5mJLw8iMRyxgicFy6LrsfLx8ev9VoATXsPw6HzUIFzW2lO1pYhFhF6xYFd9Zw6Mu0FqlBWiKjyZ3Yvr2DxYBz9Czt07rYPs0WBCGBb1cUHH2M6ELWBhlzZSSvyrSRwtV1GRgozxQib4="
+  file: "main"
+  skip_cleanup: true
+  on:
+    tags: true
