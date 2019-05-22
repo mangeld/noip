@@ -1,16 +1,13 @@
 language: go
-
 go:
- - 1.12
-
+- 1.12
 script:
-  - GOOS=linux GOARCH=amd64 go build main.go
-
+- GOOS=linux GOARCH=amd64 go build main.go
 deploy:
   provider: releases
   api_key:
-    secure: "DAhwz/g8ec2A0Dv8rtZFVEp77aG5PXxo1smJpmue4W+6Anw78baaKkS2so1yozwjnT1H4DP73Ae+4n2kNpwLRwZvPIkWRUjDJIx8XEYxlWkP2zzqH8Rwe6fxUq8TnqgUHlaWv1mpRJ6Cf6Rm1eyGGQ0oA2qqfRdnPaZNkbui3UZb9R10cmORF71J2SVO3Hv8YiuzLeSJ5KJuj9hkeWwix9sRnZR2CCnB2MUHZK8HJBZkVRbo3IiPsuGqoq1JKu4olL7xWJPR5+QAqKXcwPyhD7ASkULK4kevb3qU/ZFgdPPQzMwdk9VEKwVvUXwr94u1qFKvx0GN70rswHXeqNc+z1BRYtDZPrLm2nKrwAxksvlso4UGigxsTgKOGns6x0JZrlJvhrKNje0fFgT4zsKtZ1z2im4PIb7VGjzDFRGo71ueGX/WX9MKo7YDgvLUKFvJ5nWC/IZjr7Wnqsalb2GWEltw/arAbVfG/2nfQESMIag05kYrJw1neEXIkbMXp6KjvGNU1+5aRQMbLlBRvq89zorQEY2nJAZo5mJLw8iMRyxgicFy6LrsfLx8ev9VoATXsPw6HzUIFzW2lO1pYhFhF6xYFd9Zw6Mu0FqlBWiKjyZ3Yvr2DxYBz9Czt07rYPs0WBCGBb1cUHH2M6ELWBhlzZSSvyrSRwtV1GRgozxQib4="
-  file: "main"
-  skip_cleanup: true
+    secure: Qz+fyUWMy3ptLK3bK1Xc/nyQLzhf2P1AbPmQLkw2FGg72+4W0c7H09wV6jSw0oNVb2CDKQfP9D0iyaczt8xDhcvyyCfaKCgwYq5j/R/tgRgNdN1zPz6AIJzNryzKBIk7VZi+cPQgoKCIS0Q10v9n+4yHVl2nT4rmndx4WObCmB55W1VGfQc4y4htSHO64G/4FbjAHct7fx6DwKIvSvNLQv5gWpTuZzb+7rUJgkBqCQMGinoKnP8jNCCTnJNb6pk/7EbNFGsg+Vr2Seeg5lkpS9WpHATvxiE+0lXQ9g2EQJuijIkMJR9Gqf6xZcwsyZJibGefxjbkhlviVXvjGa5l/bQtm/v2fKi4umXdFSm+6Nvhivszn5T7KztDXyfWsfEmc/TGxLqh2TnhuBQYFPapCptzX49sLkH866MGB5B2+U89dSWY+jLFUfjBPn/TopXnmdFWshppKVXiwJPOvcTzwnzGX0HblJmVJIhitjtX6hiZ6dHUw+qjs4o2l9lTwkHsUYKBJzhFzH+XVOIYVZvms3KRoYZVy3YLxOnEWbQrdfqznMI9J8a0+jmQXkVe8zY60RbnE6wD0fREAN5ucyXRpj9ttuvH1DBVIKxMMx4sWhz6mB220wNvfDt60SWiYdNnchTFVqAudmwB+fgNFYSeyi9Zm+rZY6PZH6iNTE8lGUQ=
+  file: main
   on:
+    repo: mangeld/noip
     tags: true
