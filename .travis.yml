@@ -6,9 +6,11 @@ script:
 - GOOS=darwin GOARCH=amd64 go build -o bin/dnschange_mac_amd64 main.go 
 deploy:
   provider: releases
+  skip_cleanup: true
+  file_glob: true
+  file: bin/*
   api_key:
     secure: Qz+fyUWMy3ptLK3bK1Xc/nyQLzhf2P1AbPmQLkw2FGg72+4W0c7H09wV6jSw0oNVb2CDKQfP9D0iyaczt8xDhcvyyCfaKCgwYq5j/R/tgRgNdN1zPz6AIJzNryzKBIk7VZi+cPQgoKCIS0Q10v9n+4yHVl2nT4rmndx4WObCmB55W1VGfQc4y4htSHO64G/4FbjAHct7fx6DwKIvSvNLQv5gWpTuZzb+7rUJgkBqCQMGinoKnP8jNCCTnJNb6pk/7EbNFGsg+Vr2Seeg5lkpS9WpHATvxiE+0lXQ9g2EQJuijIkMJR9Gqf6xZcwsyZJibGefxjbkhlviVXvjGa5l/bQtm/v2fKi4umXdFSm+6Nvhivszn5T7KztDXyfWsfEmc/TGxLqh2TnhuBQYFPapCptzX49sLkH866MGB5B2+U89dSWY+jLFUfjBPn/TopXnmdFWshppKVXiwJPOvcTzwnzGX0HblJmVJIhitjtX6hiZ6dHUw+qjs4o2l9lTwkHsUYKBJzhFzH+XVOIYVZvms3KRoYZVy3YLxOnEWbQrdfqznMI9J8a0+jmQXkVe8zY60RbnE6wD0fREAN5ucyXRpj9ttuvH1DBVIKxMMx4sWhz6mB220wNvfDt60SWiYdNnchTFVqAudmwB+fgNFYSeyi9Zm+rZY6PZH6iNTE8lGUQ=
-  file: ./bin/*
   on:
     repo: mangeld/noip
     tags: true
