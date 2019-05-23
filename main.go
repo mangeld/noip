@@ -6,11 +6,10 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
-	"net/http"
 	"os"
+
+	"github.com/mangeld/noip/repos"
 
 	"github.com/digitalocean/godo"
 	"golang.org/x/oauth2"
@@ -53,17 +52,8 @@ func main() {
 }
 
 func getOwnIp() string {
-	resp, err := http.Get("http://ipinfo.io/json")
-	if err != nil {
-		fmt.Printf(err.Error())
-	}
-	defer resp.Body.Close()
-	data, _ := ioutil.ReadAll(resp.Body)
-	response := MyIp{}
-	if err = json.Unmarshal(data, &response); err != nil {
-		fmt.Printf(err.Error())
-	}
-	return response.Ip
+	repo := repos.BuildMyIpRepo()
+	return repo.GetIp()
 }
 
 func changeDnsIp(config *Config) {
